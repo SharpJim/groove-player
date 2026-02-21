@@ -1,0 +1,397 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0a0a;
+  --surface: #111;
+  --surface2: #1a1a1a;
+  --border: #222;
+  --text: #f0f0f0;
+  --muted: #555;
+  --accent: #e8ff4a;
+  --accent2: #ff4a6e;
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-display);
+  overflow-x: hidden;
+}
+
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: env(safe-area-inset-top, 16px) 0 env(safe-area-inset-bottom, 16px);
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 8px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+}
+
+.track-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+/* ── Player ── */
+.player {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 24px 24px;
+  gap: 20px;
+}
+
+/* ── Artwork ── */
+.artwork-wrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  margin: 8px 0;
+}
+
+.artwork {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--border);
+  transition: transform 0.5s ease;
+}
+
+.artwork.playing {
+  animation: spin 8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.artwork-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.vinyl {
+  width: 100%;
+  height: 100%;
+}
+
+.artwork-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  opacity: 0.15;
+}
+
+.artwork-glow {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  opacity: 0;
+  filter: blur(20px);
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.artwork-glow.active {
+  opacity: 0.25;
+}
+
+/* ── Song Info ── */
+.song-info {
+  text-align: center;
+  width: 100%;
+}
+
+.song-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.song-artist {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+/* ── Progress ── */
+.progress-section {
+  width: 100%;
+}
+
+.progress-bar-wrap {
+  cursor: pointer;
+  padding: 12px 0;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 3px;
+  background: var(--surface2);
+  border-radius: 2px;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  width: 0%;
+  transition: width 0.3s linear;
+}
+
+.progress-thumb {
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: left 0.3s linear;
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.time-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* ── Controls ── */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.ctrl-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  color: var(--text);
+}
+
+.ctrl-btn:active {
+  transform: scale(0.88);
+  opacity: 0.7;
+}
+
+.ctrl-btn.secondary svg {
+  width: 28px;
+  height: 28px;
+  color: var(--muted);
+}
+
+.ctrl-btn.secondary:hover svg {
+  color: var(--text);
+}
+
+.ctrl-btn.primary {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #0a0a0a;
+  box-shadow: 0 0 30px rgba(232, 255, 74, 0.3);
+}
+
+.ctrl-btn.primary svg {
+  width: 30px;
+  height: 30px;
+}
+
+.ctrl-btn.primary:active {
+  box-shadow: 0 0 15px rgba(232, 255, 74, 0.2);
+}
+
+/* ── Open Button ── */
+.open-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 14px 24px;
+  cursor: pointer;
+  width: 100%;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.open-btn:hover {
+  background: var(--surface);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.open-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ── Tracklist ── */
+.tracklist {
+  border-top: 1px solid var(--border);
+  padding: 0 24px 24px;
+}
+
+.tracklist-header {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  padding: 16px 0 10px;
+}
+
+.tracklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.track-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.track-item:hover {
+  background: var(--surface2);
+}
+
+.track-item.active {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+}
+
+.track-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  width: 20px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.track-item.active .track-num {
+  color: var(--accent);
+}
+
+.track-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.track-name {
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-item.active .track-name {
+  color: var(--accent);
+}
+
+.track-size {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.playing-indicator {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 16px;
+  opacity: 0;
+}
+
+.track-item.active .playing-indicator {
+  opacity: 1;
+}
+
+.bar {
+  width: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  animation: bounce 0.8s ease infinite alternate;
+}
+.bar:nth-child(1) { height: 6px; animation-delay: 0s; }
+.bar:nth-child(2) { height: 12px; animation-delay: 0.2s; }
+.bar:nth-child(3) { height: 8px; animation-delay: 0.4s; }
+
+@keyframes bounce {
+  from { transform: scaleY(0.4); }
+  to { transform: scaleY(1); }
+}
+
+.paused .bar { animation-play-state: paused; }

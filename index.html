@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Groove" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <title>Groove</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Background canvas for visualizer -->
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="app">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">GROOVE</div>
+      <div class="track-count" id="track-count">NO TRACKS</div>
+    </header>
+
+    <!-- Now Playing -->
+    <main class="player">
+
+      <!-- Artwork -->
+      <div class="artwork-wrap">
+        <div class="artwork" id="artwork">
+          <div class="artwork-inner">
+            <svg class="vinyl" viewBox="0 0 200 200" id="vinyl">
+              <circle cx="100" cy="100" r="98" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+              <circle cx="100" cy="100" r="75" fill="#111" stroke="#2a2a2a" stroke-width="1"/>
+              <circle cx="100" cy="100" r="55" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+              <circle cx="100" cy="100" r="35" fill="#111" stroke="#333" stroke-width="1"/>
+              <circle cx="100" cy="100" r="12" fill="#e8ff4a" stroke="#c8df2a" stroke-width="1"/>
+              <circle cx="100" cy="100" r="4" fill="#0a0a0a"/>
+              <!-- Groove lines -->
+              <circle cx="100" cy="100" r="65" fill="none" stroke="#222" stroke-width="0.5"/>
+              <circle cx="100" cy="100" r="60" fill="none" stroke="#222" stroke-width="0.5"/>
+              <circle cx="100" cy="100" r="45" fill="none" stroke="#222" stroke-width="0.5"/>
+              <circle cx="100" cy="100" r="40" fill="none" stroke="#222" stroke-width="0.5"/>
+            </svg>
+            <div class="artwork-placeholder" id="artwork-placeholder">
+              <span>♪</span>
+            </div>
+          </div>
+        </div>
+        <div class="artwork-glow" id="artwork-glow"></div>
+      </div>
+
+      <!-- Song Info -->
+      <div class="song-info">
+        <div class="song-title" id="song-title">Select your tracks</div>
+        <div class="song-artist" id="song-artist">tap the folder below</div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-section">
+        <div class="progress-bar-wrap" id="progress-wrap">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+            <div class="progress-thumb" id="progress-thumb"></div>
+          </div>
+        </div>
+        <div class="time-row">
+          <span id="time-current">0:00</span>
+          <span id="time-duration">0:00</span>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <button class="ctrl-btn secondary" id="btn-prev" aria-label="Previous">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+        </button>
+        <button class="ctrl-btn primary" id="btn-play" aria-label="Play/Pause">
+          <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+        <button class="ctrl-btn secondary" id="btn-next" aria-label="Next">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm2.5-6 6-4.3v8.6L8.5 12zM16 6h2v12h-2z"/></svg>
+        </button>
+      </div>
+
+      <!-- Open Files Button -->
+      <button class="open-btn" id="open-btn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>
+        Load MP3s from Files
+      </button>
+      <input type="file" id="file-input" accept=".mp3,audio/*" multiple style="display:none" />
+    </main>
+
+    <!-- Track List -->
+    <section class="tracklist" id="tracklist" style="display:none">
+      <div class="tracklist-header">QUEUE</div>
+      <div class="tracklist-items" id="tracklist-items"></div>
+    </section>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
