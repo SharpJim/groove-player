@@ -1,0 +1,23 @@
+{
+  "name": "Groove Music Player",
+  "short_name": "Groove",
+  "description": "A clean, fast music player for your MP3s",
+  "start_url": "https://sharpjim.github.io/groove-player/",
+  "scope": "https://sharpjim.github.io/groove-player/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
